@@ -9,6 +9,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -32,14 +33,11 @@ namespace Microsoft.BotBuilderSamples
         public const string OnTurnPropertyName = "onTurnStateProperty";
         public const string DialogStateProperty = "dialogStateProperty";
 
-        // The name of the bot you deployed.
-        public static readonly string MsBotName = "cafe66";
-
         /// <summary>
         /// Key in the bot config (.bot file) for the LUIS instances.
         /// In the .bot file, multiple instances of LUIS can be configured.
         /// </summary>
-        public static readonly string LuisConfiguration = MsBotName + "_" + "cafeDispatchModel";
+        public static readonly string LuisConfiguration = "cafeDispatchModel";
 
         // Greeting Dialog ID.
         public static readonly string GreetingDialogId = "greetingDialog";
@@ -112,7 +110,7 @@ namespace Microsoft.BotBuilderSamples
         /// <summary>
         /// Every conversation turn for our Basic Bot will call this method.
         /// </summary>
-        /// <param name="context">A <see cref="ITurnContext"/> containing all the data needed
+        /// <param name="turnContext">A <see cref="ITurnContext"/> containing all the data needed
         /// for processing this conversation turn. </param>
         /// <param name="cancellationToken">(Optional) A <see cref="CancellationToken"/> that can be used by other objects
         /// or threads to receive notice of cancellation.</param>
@@ -152,6 +150,7 @@ namespace Microsoft.BotBuilderSamples
                     {
                         await SendWelcomeMessageAsync(turnContext);
                     }
+
                     break;
                 default:
                     // Handle other activity types as needed.
@@ -168,8 +167,10 @@ namespace Microsoft.BotBuilderSamples
             // Handle card input (if any), update state and return.
             if (turnContext.Activity.Value != null)
             {
-                var response = JsonConvert.DeserializeObject<Dictionary<string, string>>(turnContext.Activity.Value as string);
-                return OnTurnProperty.FromCardInput(response);
+                if (turnContext.Activity.Value is JObject)
+                {
+                    return OnTurnProperty.FromCardInput((JObject)turnContext.Activity.Value);
+                }
             }
 
             // Acknowledge attachments from user.

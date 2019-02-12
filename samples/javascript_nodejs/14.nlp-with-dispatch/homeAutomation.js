@@ -37,12 +37,14 @@ class HomeAutomation {
         this.state = new HomeAutomationState(convoState, userState);
 
         // add recognizers
-        const luisConfig = botConfig.findServiceByNameOrId(LUIS_CONFIGURATION);
+        const luisServiceName = botConfig.name + '_' + LUIS_CONFIGURATION;
+        const luisConfig = botConfig.findServiceByNameOrId(luisServiceName);
         if (!luisConfig || !luisConfig.appId) throw new Error(`Home automation LUIS model not found in .bot file. Please ensure you have all required LUIS models created and available in the .bot file. See readme.md for additional information\n`);
         this.luisRecognizer = new LuisRecognizer({
             applicationId: luisConfig.appId,
             azureRegion: luisConfig.region,
-            // CAUTION: Its better to assign and use a subscription key instead of authoring key here.
+            // CAUTION: Authoring key is used in this example as it is appropriate for prototyping.
+            // When implimenting for deployment/production, assign and use a subscription key instead of an authoring key.
             endpointKey: luisConfig.authoringKey
         });
     }
@@ -87,8 +89,7 @@ class HomeAutomation {
 
         if (operations === undefined) {
             await context.sendActivity(`You reached the "HomeAutomation" dialog. However you need to specific an operation, for example turn on bedroom light`);
-        }
-        else {
+        } else {
             // Update device state.
             await this.state.setDevice((devices || devicesPatternAny), (rooms || roomsPatternAny), operations[0], (deviceProperties || numberProperties), context);
             await context.sendActivity(`You reached the "HomeAutomation" dialog.`);
@@ -96,7 +97,6 @@ class HomeAutomation {
             // read out operations list
             await context.sendActivity(await this.state.getDevices(context));
         }
-
     }
 };
 

@@ -28,7 +28,7 @@ namespace LuisBot
             config.MapBotFramework(botConfig =>
             {
                 // Load Connected Services from .bot file
-                var path = HostingEnvironment.MapPath(@"~/LuisBot.bot");
+                var path = HostingEnvironment.MapPath(@"~/nlp-with-luis.bot");
                 var botConfigurationFile = BotConfiguration.Load(path);
                 var endpointService = (EndpointService)botConfigurationFile.Services.First(s => s.Type == "endpoint");
 
@@ -87,7 +87,9 @@ namespace LuisBot
                                 throw new InvalidOperationException("The Region ('region') is required to run this sample.  Please update your '.bot' file.");
                             }
 
-                            var app = new LuisApplication(luis.AppId, luis.SubscriptionKey, luis.Region);
+                            // CAUTION: Authoring key is used in this example as it is appropriate for prototyping.
+                            // When implimenting for deployment/production, assign and use a subscription key instead of an authoring key.
+                            var app = new LuisApplication(luis.AppId, luis.AuthoringKey, luis.GetEndpoint());
                             var recognizer = new LuisRecognizer(app);
                             luisServices.Add(LuisBot.LuisKey, recognizer);
                             break;

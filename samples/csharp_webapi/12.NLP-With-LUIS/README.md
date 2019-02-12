@@ -12,7 +12,7 @@ git clone https://github.com/Microsoft/botbuilder-dotnet.git
 - Click on `My Apps`.
 - Click on the `Import new app` button.
 - Click on the `Choose File` and select [LUIS-Reminders.json](LUIS-Reminders.json) from the `BotBuilder-Samples\samples\csharp_webapi\12.NLP-With-LUIS\CognitiveModels` folder.
-- Update [LuisBot.bot](LuisBot.bot) file with your AppId, SubscriptionKey, Region and Version. 
+- Update [nlp-with-luis.bot](nlp-with-luis.bot) file with your AppId, SubscriptionKey, Region and Version. 
     You can find this information under "Publish" tab for your LUIS application at [LUIS portal](https://www.luis.ai).  For example, for https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/XXXXXXXXXXXXX?subscription-key=YYYYYYYYYYYY&verbose=true&timezoneOffset=0&q= 
 
     - The `AppID` can be found in "Application Information"
@@ -20,8 +20,9 @@ git clone https://github.com/Microsoft/botbuilder-dotnet.git
     - The `region` can be found in "Keys and Endpoints", under the `Region` column
     - The Version is listed on the page.
 
-- Update [LuisBot.bot](LuisBot.bot) file with your Authoring Key.
+- Update [nlp-with-luis.bot](nlp-with-luis.bot) file with your Authoring Key.
     You can find this under your user settings at [luis.ai](https://www.luis.ai). Click on your name in the upper right hand corner of the portal, and click on the "Settings" menu option.
+- **Important:** Ensure that `LuisKey` in `LuisBot.cs` matches the `name` property of your LUIS endpoint in your `nlp-with-luis.bot` file.
 NOTE: Once you publish your app on LUIS portal for the first time, it takes some time for the endpoint to become available, about 5 minutes of wait should be sufficient.
 ### (Optional) Install LuDown
 - (Optional) Install the LUDown [here](https://github.com/Microsoft/botbuilder-tools/tree/master/packages/Ludown) to help describe language understanding components for your bot.
@@ -41,7 +42,7 @@ NOTE: Once you publish your app on LUIS portal for the first time, it takes some
 ### Connect to bot using Bot Framework Emulator V4
 - Launch Bot Framework Emulator
 - File -> Open bot and navigate to `BotBuilder-Samples\samples\csharp_webapi\12.NLP-With-LUIS` folder
-- Select `LuisBot.bot` file
+- Select `nlp-with-luis.bot` file
 # Further reading
 - [Azure Bot Service](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-overview-introduction?view=azure-bot-service-4.0)
 - [Luis documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/)

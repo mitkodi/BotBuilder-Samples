@@ -64,7 +64,7 @@ namespace NLP_With_Dispatch_Bot
             }
 
             // Loads .bot configuration file and adds a singleton that your Bot can access through dependency injection.
-            var botConfig = BotConfiguration.Load(botFilePath ?? @".\BotConfiguration.bot", secretKey);
+            var botConfig = BotConfiguration.Load(botFilePath ?? @".\nlp-with-dispatch.bot", secretKey);
             services.AddSingleton(sp => botConfig ?? throw new InvalidOperationException($"The .bot configuration file could not be loaded. botFilePath: {botFilePath}"));
 
             // Retrieve current endpoint.
@@ -176,10 +176,12 @@ namespace NLP_With_Dispatch_Bot
                                 throw new InvalidOperationException("The Luis Authoring Key ('authoringKey') is required to run this sample. Please update your '.bot' file.");
                             }
 
-                            if (string.IsNullOrWhiteSpace(luis.SubscriptionKey))
-                            {
-                                throw new InvalidOperationException("The Subscription Key ('subscriptionKey') is required to run this sample. Please update your '.bot' file.");
-                            }
+                            // CAUTION: Authoring key is used in this example as it is appropriate for prototyping.
+                            // When implimenting for deployment/production, assign and use a subscription key instead of an authoring key.
+                            // if (string.IsNullOrWhiteSpace(luis.SubscriptionKey))
+                            // {
+                            //     throw new InvalidOperationException("The Subscription Key ('subscriptionKey') is required to run this sample. Please update your '.bot' file.");
+                            // }
 
                             if (string.IsNullOrWhiteSpace(luis.Region))
                             {
@@ -223,6 +225,8 @@ namespace NLP_With_Dispatch_Bot
                             throw new InvalidOperationException("The Region ('region') is required to run this sample. Please update your '.bot' file.");
                         }
 
+                        // CAUTION: Authoring key is used in this example as it is appropriate for prototyping.
+                        // When implimenting for deployment/production, assign and use a subscription key instead of an authoring key.
                         var dispatchApp = new LuisApplication(dispatch.AppId, dispatch.AuthoringKey, dispatch.GetEndpoint());
 
                         // Since the Dispatch tool generates a LUIS model, we use LuisRecognizer to resolve dispatching of the incoming utterance

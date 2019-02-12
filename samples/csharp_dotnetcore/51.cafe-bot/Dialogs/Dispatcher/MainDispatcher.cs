@@ -10,6 +10,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -166,7 +167,7 @@ namespace Microsoft.BotBuilderSamples
                 case WhoAreYouDialog.Name:
                     return await dc.BeginDialogAsync(WhoAreYouDialog.Name);
                 case WhatCanYouDo.Name:
-                    return await dc.BeginDialogAsync(WhatCanYouDo.Name);
+                    return await BeginWhatCanYouDoDialogAsync(dc, onTurnProperty);
                 case "None":
                 default:
                     await dc.Context.SendActivityAsync("I'm still learning.. Sorry, I do not know how to help you with that.");
@@ -212,10 +213,10 @@ namespace Microsoft.BotBuilderSamples
             var queryProperty = (onTurnProperty.Entities ?? new List<EntityProperty>()).Where(item => string.Compare(item.EntityName, QueryProperty) == 0);
             if (queryProperty.Count() > 0)
             {
-                Dictionary<string, string> response;
+                JObject response;
                 try
                 {
-                    response = JsonConvert.DeserializeObject<Dictionary<string, string>>(queryProperty.ElementAtOrDefault(0).Value as string);
+                    response = (JObject)queryProperty.ElementAtOrDefault(0).Value;
                 }
                 catch
                 {
@@ -225,7 +226,7 @@ namespace Microsoft.BotBuilderSamples
 
                 if (response.TryGetValue("text", out var text))
                 {
-                    context.Activity.Text = text;
+                    context.Activity.Text = text.ToString();
                     await context.SendActivityAsync($"You said: '{context.Activity.Text}'.");
                 }
 

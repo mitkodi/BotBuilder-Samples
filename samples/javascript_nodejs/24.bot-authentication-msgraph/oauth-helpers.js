@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-const { ActivityTypes, TokenResponse, TurnContext } = require('botbuilder');
+const { ActivityTypes } = require('botbuilder');
 const { OAuthPrompt } = require('botbuilder-dialogs');
 const { SimpleGraphClient } = require('./simple-graph-client');
 
@@ -42,7 +42,7 @@ class OAuthHelpers {
 
     /**
      * Displays information about the user in the bot.
-     *@param {TurnContext} turnContext A TurnContext instance containing all the data needed for processing this conversation turn.
+     * @param {TurnContext} turnContext A TurnContext instance containing all the data needed for processing this conversation turn.
      * @param {TokenResponse} tokenResponse A response that includes a user token.
      */
     static async listMe(turnContext, tokenResponse) {

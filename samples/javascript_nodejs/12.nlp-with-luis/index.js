@@ -47,7 +47,9 @@ const luisConfig = botConfig.findServiceByNameOrId(LUIS_CONFIGURATION);
 // Map the contents to the required format for `LuisRecognizer`.
 const luisApplication = {
     applicationId: luisConfig.appId,
-    endpointKey: luisConfig.subscriptionKey || luisConfig.authoringKey,
+    // CAUTION: Authoring key is used in this example as it is appropriate for prototyping.
+    // When implimenting for deployment/production, assign and use a subscription key instead of an authoring key.
+    endpointKey: luisConfig.authoringKey,
     endpoint: luisConfig.getEndpoint()
 };
 
@@ -65,9 +67,9 @@ const adapter = new BotFrameworkAdapter({
 });
 
 // Catch-all for errors.
-adapter.onTurnError = async(turnContext, error) => {
+adapter.onTurnError = async (context, error) => {
     console.error(`\n [onTurnError]: ${ error }`);
-    await turnContext.sendActivity(`Oops. Something went wrong!`);
+    await context.sendActivity(`Oops. Something went wrong!`);
 };
 
 // Create the LuisBot.
@@ -89,7 +91,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function() {
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
-    adapter.processActivity(req, res, async(turnContext) => {
+    adapter.processActivity(req, res, async (turnContext) => {
         await bot.onTurn(turnContext);
     });
 });
